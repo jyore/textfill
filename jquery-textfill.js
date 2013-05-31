@@ -1,6 +1,6 @@
 /**************************************************************************
 
-  jQuery Textfill Plugin v0.1.1
+  jQuery Textfill Plugin v0.1.2
 
   This plugin is designed to automatically resize fonts based on a container size.
 
@@ -36,13 +36,13 @@ DEALINGS IN THE SOFTWARE.
 	var settings = {
 		maxFontSize : 40,
 		minFontSize : 3,
+		fixedLineHeight : false
 	}
 
 	var methods = {
-		opts : {},
 		init : function(options) {
 			return this.each(function() {
-				methods.opts = $.extend({},settings,options);
+				$.data($(this)[0],'opts',$.extend({},settings,options));
 				var me = $(this);
 				
 				var text = me.text();
@@ -61,28 +61,33 @@ DEALINGS IN THE SOFTWARE.
 		},
 		update : function(value) {
 			var element = $(this);
+			var opts = $.data(element[0],'opts');
 			var text = element.children('.textfill-inner');
 
 			if(typeof value === 'string') {
 				text.text(value);
 			}
 
-			
-			var size = methods.opts.maxFontSize;
+			var size = opts.maxFontSize;
 			var maxH = element.height();
 			var maxW = element.width();
 			var textH;
 			var textW;
 
 			do {
-				text.css({
-					'font-size':size + 'px',
-					'line-height':size + 'px'
-				});
+				if(!opts.fixedLineHeight) {
+					text.css({
+						'font-size':size + 'px',
+						'line-height':size + 'px'
+					});
+				} else {
+					text.css('font-size',size + 'px');
+				}
+
 				--size;
 				textH = text.height();
 				textW = text.width();
-			} while((textH > maxH || textW > maxW) && size > methods.opts.minFontSize);
+			} while((textH > maxH || textW > maxW) && size > opts.minFontSize);
 		}
 	};
 			
