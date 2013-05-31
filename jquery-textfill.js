@@ -1,6 +1,6 @@
 /**************************************************************************
 
-  jQuery Textfill Plugin v0.1.0
+  jQuery Textfill Plugin v0.1.1
 
   This plugin is designed to automatically resize fonts based on a container size.
 
@@ -75,7 +75,11 @@ DEALINGS IN THE SOFTWARE.
 			var textW;
 
 			do {
-				text.css('font-size',size--);
+				text.css({
+					'font-size':size + 'px',
+					'line-height':size + 'px'
+				});
+				--size;
 				textH = text.height();
 				textW = text.width();
 			} while((textH > maxH || textW > maxW) && size > methods.opts.minFontSize);
